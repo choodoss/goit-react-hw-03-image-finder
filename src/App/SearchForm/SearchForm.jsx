@@ -1,15 +1,38 @@
+import { Component } from "react";
+import { SearchFormCont, SearchFormBody, SearchInput, SearchButton } from './SearchForm.styled'
+import { BsSearch } from 'react-icons/bs';
 
-export default function SearchForm() {
-    const searchForm = <section> <div class="container">
-        <form class="search-form" autocomplete="off" name="search-form">
-            <div class="search-form__body">
-                <input type="text" name="searchQuery" placeholder="Search images..." />
-                <button type="submit" class="search-button"></button>
-            </div>
-            <div class="filters is-hidden">
+class SearchForm extends Component {
+    state = {
+        searchName: '',
+
+    };
+
+    hendlerSearchValue = ({ currentTarget: { value } }) => {
+        this.setState({ searchName: value });
+    };
+
+    henderSubmitForm = (e) => {
+        e.preventDefault();
+        this.props.onSubmit({ submit: true, searchName: this.state.searchName })
+
+    };
+    render() {
+        const { searchName } = this.state;
+        const { submitted } = this.props;
+
+        const searchForm =
+            <section>
+                <div className="container">
+                    <SearchFormCont onSubmit={this.henderSubmitForm} submitted={submitted} autoComplete="off" name="searchForm">
+                        <SearchFormBody>
+                            <SearchInput onChange={this.hendlerSearchValue} type="text" name="searchQuery" placeholder="Search images and photos" value={searchName} autoFocus />
+                            <SearchButton type="submit" ><BsSearch fill="currentColor" /></SearchButton>
+                        </SearchFormBody>
+                        {/* <div class="filters">
                 <div class="sam-dropdown">
                     <select name="category">
-                        <option selected value="">category</option>
+                        <option selected value="all">all</option>
                         <option value="backgrounds">backgrounds</option>
                         <option value="fashion">fashion</option>
                         <option value="nature">nature</option>
@@ -33,6 +56,7 @@ export default function SearchForm() {
                 </div>
                 <div class="sam-dropdown">
                     <select name="colors">
+                        <option selected value="all">all</option>
                         <option value="grayscale">grayscale</option>
                         <option value="transparent">transparent</option>
                         <option value="red">red</option>
@@ -55,18 +79,21 @@ export default function SearchForm() {
                     </select>
                 </div>
                 <div class="sam-dropdown">
-                    <select name="image type">
+                    <select name="imageType">
                         <option value="all">all</option>
                         <option value="photo">photo</option>
                         <option selected value="illustration">illustration</option>
                         <option value="vector">vector</option>
                     </select>
                 </div>
-            </div>
-        </form>
-    </div>
-    </section>;
+            </div> */}
+                    </SearchFormCont>
+                </div>
+            </section>
 
-    return searchForm;
-}
+        return searchForm;
+    }
+};
+
+export default SearchForm;
 
