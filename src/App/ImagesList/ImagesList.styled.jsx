@@ -28,7 +28,12 @@ export const ImgItem = styled.li`
     }
 `
 export const Img = styled.img`
+display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    &:hover{
+        filter: brightness(1.2);
+        cursor: pointer;
+    }
 `

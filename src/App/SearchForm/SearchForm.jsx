@@ -5,7 +5,6 @@ import { BsSearch } from 'react-icons/bs';
 class SearchForm extends Component {
     state = {
         searchName: '',
-
     };
 
     hendlerSearchValue = ({ currentTarget: { value } }) => {
@@ -14,7 +13,11 @@ class SearchForm extends Component {
 
     henderSubmitForm = (e) => {
         e.preventDefault();
+        if (this.state.searchName.trim().length === 0) {
+            return alert("Введіть валідний запит")
+        }
         this.props.onSubmit({ submit: true, searchName: this.state.searchName })
+        this.setState({ searchName: '' });
 
     };
     render() {

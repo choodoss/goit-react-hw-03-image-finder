@@ -30,7 +30,7 @@ export const ImagesGroup = styled.div`
 }`
 
 export const Image = styled.img`
-
+display: block;
     object-fit: cover;
     height: calc((100svh - 10px) / ${(props) => props.height});
     width: calc((100svw - 10px) / ${(props) => props.width});
