@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import BackgroundContainer from './BackgroundContainer/BackgroundContainer';
 import { searchImages } from './fetchDefault/fetchDefault';
 import SearchForm from './SearchForm/SearchForm';
@@ -28,32 +30,42 @@ class App extends Component {
   };
 
   componentDidMount() {
-    const local = localStorage.getItem("searchName");
-    if (local) {
-      this.setState({ name: JSON.parse(local) }, () => {
-        searchImages(this.state)
-          .then(res => {
-            return this.setState({ response: res.hits })
-          })
-      })
-    };
-
     searchImages(this.state)
       .then(res => {
         return this.setState({ response: res.hits })
       })
   };
 
-  hendlerSubmitChange = async ({ submit, searchName }) => {
-    await this.setState({ per_page: 16, name: searchName, loading: true })
+  hendlerSubmitChange = async ({ submit, searchName, category, colors, orientation, image_type }) => {
+    if (searchName === undefined) {
+      if (category) {
+        await this.setState({ name: '', loading: true, category: category })
+      }
+      if (colors) {
+        await this.setState({ name: this.state.name, loading: true, colors: colors })
+      }
+      if (orientation) {
+        await this.setState({ name: this.state.name, loading: true, orientation: orientation })
+      }
+      if (image_type) {
+        await this.setState({ name: this.state.name, loading: true, image_type: image_type })
+      }
+    } else {
+      await this.setState({
+        per_page: 16, name: searchName, loading: true, category: "all", colors: 'all',
+        orientation: 'all', image_type: 'all',
+      })
+    }
     await searchImages(this.state)
       .then(res => {
         if (res.total !== 0) {
           return this.setState({ submitted: { submit }, response: res.hits, total: res.total, loading: false })
         }
-        return alert("Картинки за вашим запитом відсутні")
+        this.setState({ loading: false })
+        return toast.error("Картинки за вашим запитом відсутні")
       })
-    localStorage.setItem("searchName", JSON.stringify(searchName))
+
+
   }
 
   hendlerLoadMore = async () => {
@@ -98,6 +110,10 @@ class App extends Component {
         {total > 1 && response && submitted ? <LoadBtn hendlerLoadMore={hendlerLoadMore} /> : null}
         {loader}
         {modalOpen && <Modal hendlerCloseImage={this.hendlerCloseImage}><Img src={largeImg} /></Modal>}
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+        />
       </Container>
     );
     return app;

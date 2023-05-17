@@ -82,3 +82,50 @@ export const SearchButton = styled.button`
         color: #fff;
     }
 `
+export const Filters = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: ${({ submitted }) => submitted ? 1 : 0};
+    pointer-events: ${({ submitted }) => submitted ? 'all' : 'none'};
+`
+export const SelectGroup = styled.div`
+        position: relative;
+display: block;
+width: 10em;
+height: 120%;
+
+background: #d7e7d0;
+overflow: hidden;
+border-radius: .25em;
+&:after {
+    content: '\\00d7';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 1em;
+    background: #d7e7d0;
+    ;
+    pointer-events: none;
+
+}
+&:hover::after {
+    color: #f39c12;
+
+}
+`
+export const Select = styled.select`
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0 0 0 .5em;
+    color: #646363;
+    cursor: pointer;
+    appearance: none;
+    outline: 0;
+    box-shadow: none;
+    border: 0;
+    background: #d7e7d0;
+    background-image: none;
+    `
