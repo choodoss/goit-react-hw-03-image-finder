@@ -6,6 +6,10 @@ import { toast } from 'react-toastify';
 class SearchForm extends Component {
     state = {
         searchName: '',
+        selectedCategory: 'all',
+        selectedColor: 'all',
+        selectedOrientation: 'all',
+        selectedImageType: 'all',
     };
 
     hendlerSearchValue = ({ currentTarget: { value } }) => {
@@ -21,11 +25,13 @@ class SearchForm extends Component {
         this.setState({ searchName: '' });
     };
 
-    henderFilterForm = (e) => {
-        this.props.onSubmit({ [e.currentTarget.name]: e.target.value })
-    }
+    henderFilterForm = ({ currentTarget: { name, value } }) => {
+        this.setState({ [name]: value });
+        this.props.onSubmit({ [name]: value });
+    };
+
     render() {
-        const { searchName } = this.state;
+        const { searchName, selectedCategory, selectedColor, selectedOrientation, selectedImageType } = this.state;
         const { submitted } = this.props;
 
         const searchForm =
@@ -35,9 +41,9 @@ class SearchForm extends Component {
                         <SearchInput onChange={this.hendlerSearchValue} type="text" name="searchQuery" placeholder="Search images and photos" value={searchName} autoFocus />
                         <SearchButton type="submit" ><BsSearch fill="currentColor" /></SearchButton>
                     </SearchFormBody>
-                    <Filters className="filters" submitted={submitted}>
+                    {submitted && <Filters className="filters">
                         <SelectGroup>
-                            <Select onChange={this.henderFilterForm} name="category" defaultValue="all">
+                            <Select onChange={this.henderFilterForm} name="category" value={selectedCategory}>
                                 <option value="all">category</option>
                                 <option value="backgrounds">backgrounds</option>
                                 <option value="fashion">fashion</option>
@@ -61,7 +67,7 @@ class SearchForm extends Component {
                             </Select>
                         </SelectGroup>
                         <SelectGroup>
-                            <Select onChange={this.henderFilterForm} name="colors" defaultValue="all">
+                            <Select onChange={this.henderFilterForm} name="colors" value={selectedColor}>
                                 <option value="all">colors</option>
                                 <option value="grayscale">grayscale</option>
                                 <option value="transparent">transparent</option>
@@ -78,21 +84,21 @@ class SearchForm extends Component {
                             </Select>
                         </SelectGroup>
                         <SelectGroup>
-                            <Select onChange={this.henderFilterForm} name="orientation" defaultValue="all">
+                            <Select onChange={this.henderFilterForm} name="orientation" value={selectedOrientation}>
                                 <option value="all">orientation</option>
                                 <option value="horizontal">horizontal</option>
                                 <option value="vertical">vertical</option>
                             </Select>
                         </SelectGroup>
                         <SelectGroup>
-                            <Select onChange={this.henderFilterForm} name="image_type" defaultValue="all">
+                            <Select onChange={this.henderFilterForm} name="image_type" value={selectedImageType}>
                                 <option value="all">image type</option>
                                 <option value="photo">photo</option>
                                 <option value="illustration">illustration</option>
                                 <option value="vector">vector</option>
                             </Select>
                         </SelectGroup>
-                    </Filters>
+                    </Filters>}
                 </SearchFormCont>
             </section>
         return searchForm;

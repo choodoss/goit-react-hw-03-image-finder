@@ -86,8 +86,6 @@ export const Filters = styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
-    opacity: ${({ submitted }) => submitted ? 1 : 0};
-    pointer-events: ${({ submitted }) => submitted ? 'all' : 'none'};
 `
 export const SelectGroup = styled.div`
         position: relative;

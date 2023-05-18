@@ -53,13 +53,14 @@ class App extends Component {
     } else {
       await this.setState({
         per_page: 16, name: searchName, loading: true, category: "all", colors: 'all',
-        orientation: 'all', image_type: 'all',
+        orientation: 'all', image_type: 'all', page: 1,
       })
     }
     await searchImages(this.state)
       .then(res => {
+        console.log(res)
         if (res.total !== 0) {
-          return this.setState({ submitted: { submit }, response: res.hits, total: res.total, loading: false })
+          return this.setState({ submitted: { submit }, response: res.hits, total: res.totalHits, loading: false })
         }
         this.setState({ loading: false })
         return toast.error("Картинки за вашим запитом відсутні")
@@ -69,10 +70,10 @@ class App extends Component {
   }
 
   hendlerLoadMore = async () => {
-    await this.setState(prevState => ({ total: prevState.total - 40, page: prevState.page + 1, loading: true }))
+    await this.setState(prevState => ({ total: prevState.total - 16, page: prevState.page + 1, loading: true }))
     await searchImages(this.state)
       .then(res => {
-        return this.setState({ total: res.total, response: [...this.state.response, ...res.hits], loading: false })
+        return this.setState({ response: [...this.state.response, ...res.hits], loading: false })
       })
   }
 
@@ -89,6 +90,7 @@ class App extends Component {
     const hendlerSubmitChange = this.hendlerSubmitChange;
     const hendlerLoadMore = this.hendlerLoadMore;
     const hendlerOpenImage = this.hendlerOpenImage;
+    console.log(total)
 
     const loader = createPortal(
       <ColorRing
@@ -107,7 +109,7 @@ class App extends Component {
         {response && !submitted ? <BackgroundContainer response={response} /> : null}
         <SearchForm onSubmit={hendlerSubmitChange} submitted={submitted} />
         {response && submitted ? <ImagesList response={response} hendlerOpenImage={hendlerOpenImage} /> : null}
-        {total > 1 && response && submitted ? <LoadBtn hendlerLoadMore={hendlerLoadMore} /> : null}
+        {total > 16 && response && submitted ? <LoadBtn hendlerLoadMore={hendlerLoadMore} /> : null}
         {loader}
         {modalOpen && <Modal hendlerCloseImage={this.hendlerCloseImage}><Img src={largeImg} /></Modal>}
         <ToastContainer
